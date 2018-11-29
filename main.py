@@ -37,7 +37,7 @@ class MainPage(webapp2.RequestHandler):
 			return request.execute()  # waits till request is returned
 
 	def get_webcams(self):
-		print "fetching webcams"
+		print("fetching webcams")
 		response = urlfetch.fetch("https://webcamstravel.p.mashape.com/webcams/list/nearby=36.0063,-5.6026,20?lang=en&show=webcams%3Aimage%2Clocation",
 		  headers={
 		    "X-Mashape-Key": "eZ2vSr20A7mshAoxov8PDGhXvx6gp16y70xjsnGfgKDofQQQ8a",
@@ -52,7 +52,7 @@ class MainPage(webapp2.RequestHandler):
 		for webcam in self.get_webcams()["result"]["webcams"]:
 			camlist.append((webcam["title"], webcam["image"]["current"]["preview"]))
 
-		print camlist
+		print(camlist)
 
 		url = camlist[0][1]
 		project = "dev-dpfeller"
