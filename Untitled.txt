@@ -5,3 +5,16 @@ gcloud projects add-iam-policy-binding dev-dpfeller --member=serviceAccount:auto
 
 
 gcloud projects add-iam-policy-binding dev-dpfeller --member="serviceAccount:custom-vision@appspot.gserviceaccount.com"  --role="roles/storage.admin"
+
+
+
+gcloud auth login
+gcloud projects add-iam-policy-binding dev-dpfeller --member="user:dpfeller@google.com" --role="roles/automl.admin"
+gcloud projects add-iam-policy-binding $PROJECT_ID \
+   --member="serviceAccount:service-account-name" \
+   --role="roles/automl.editor"
+
+
+gcloud projects add-iam-policy-binding dev-dpfeller --member="serviceAccount:automlvision@dev-dpfeller.iam.gserviceaccount.com" --role="roles/ml.admin"
+gcloud projects add-iam-policy-binding dev-dpfeller --member="serviceAccount:automlvision@dev-dpfeller.iam.gserviceaccount.com" --role="roles/storage.admin"
+gcloud projects add-iam-policy-binding dev-dpfeller --member="serviceAccount:automlvision@dev-dpfeller.iam.gserviceaccount.com" --role="roles/serviceusage.serviceUsageAdmin"

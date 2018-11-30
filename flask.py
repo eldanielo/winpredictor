@@ -2,26 +2,28 @@
 import requests
 import json
 import base64
-from oauth2client.client import GoogleCredentials
 from google.cloud import automl_v1beta1
 from google.cloud.automl_v1beta1.proto import service_pb2
+from flask import Flask
 
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
-credentials = GoogleCredentials.get_application_default()
 
 # HTTPRequestHandler class
 class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
 
     def get_prediction(self, content, project_id, model_id):
-        
         prediction_client = automl_v1beta1.PredictionServiceClient()
         name = 'projects/{}/locations/us-central1/models/{}'.format(project_id, model_id)
         payload = {'image': {'image_bytes': content }}
         params = {}
-        request = prediction_client.predict(name, payload, params)
-        return request  # waits till request is returned
+        try:
+            request = prediction_client.predict(name, payload, params)
+        except Exception as e:
+            print(e)
+            return []
+        return request.payload  # waits till request is returned
 
     def get_webcams(self):
         print("fetching webcams")
@@ -49,17 +51,17 @@ class testHTTPServer_RequestHandler(BaseHTTPRequestHandler):
             instance = requests.get(cam[1]).content
             #instance = {'key': '0', 'image_bytes': {'b64': base64.b64encode(requests.get(cam[1]).content)}}   
             prediction = self.get_prediction(instance, project,  model)
-            score = prediction["predictions"][0]["scores"]
-            description = ""
-            if(float(score[0]) >= float(score[1])):
-                description = "no wind :("
-            else:
-                description = "GO KITE!!!1!"
-            predictlist.append((cam[0], cam[1],prediction["predictions"][0]["scores"], prediction["predictions"][0]["labels"], description ))
+            if(prediction is not None):
+                print(prediction)
+                score = prediction[0].classification.score
+                display_name = prediction[0].display_name
+                description = ""
+                predictlist.append((cam[0], cam[1],score, display_name, description ))
             
-        template_values = {
-            'predictlist': predictlist,
-            }
+            template_values = {
+                'predictlist': predictlist,
+                }
+            print(template_values)
 
 	
         
