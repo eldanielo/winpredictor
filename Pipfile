@@ -146,6 +146,7 @@ json = "*"
 googlecredentials = "*"
 google-cloud-automl = "*"
 flask = "*"
+googlemaps = "*"
 
 [requires]
 python_version = "3.5"
